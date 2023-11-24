@@ -6,13 +6,12 @@ export const Container = styled.div``;
 export const Answer = styled.button`
   background-color: ${COLORS["container"]};
   padding: 1rem;
-  display: grid;
-  grid-template-columns: 50px auto;
+  display: flex;
+  gap: 1rem;
   align-items: center;
   color: ${COLORS["white"]};
   border-radius: 8px;
   transition: all ease 0.3s;
-
   &:active {
     transform: scale(0.98);
   }

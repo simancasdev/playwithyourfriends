@@ -1,4 +1,4 @@
-import {Room} from "pages";
+import {Router} from "router";
 import {Fragment} from "react";
 import {Github} from "components";
 
@@ -6,7 +6,7 @@ function App() {
   return (
     <Fragment>
       <Github />
-      <Room />
+      <Router />
     </Fragment>
   );
 }
