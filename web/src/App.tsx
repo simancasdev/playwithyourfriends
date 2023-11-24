@@ -1,13 +1,13 @@
 import {Router} from "router";
-import {Fragment} from "react";
 import {Github} from "components";
+import {Provider} from "context";
 
 function App() {
   return (
-    <Fragment>
+    <Provider>
       <Github />
       <Router />
-    </Fragment>
+    </Provider>
   );
 }
 
