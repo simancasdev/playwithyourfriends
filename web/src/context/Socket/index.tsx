@@ -1,23 +1,25 @@
 import {Children} from "interfaces";
-import {io} from "socket.io-client";
-import {createContext, useEffect, useMemo} from "react";
+import {Socket, io} from "socket.io-client";
+import {useMemo, useContext, createContext} from "react";
 
-type IContext = {};
+type IContext = {
+  socket: Socket;
+};
 
-const Context = createContext<IContext>({});
+const Context = createContext<IContext>({
+  socket: {} as Socket,
+});
+
+export const useSocket = () => useContext(Context);
 
 interface SocketProviderProps extends Children {}
 
 export const SocketProvider: React.FC<SocketProviderProps> = ({children}) => {
-  useEffect(() => {
-    const socket = io("http://localhost:8090");
+  const socket = io("http://localhost:8090");
 
-    socket.on("connection", () => console.log(socket.id));
-    socket.on("connect_error", function (err) {
-      console.log("error", err);
-    });
-  }, []);
+  socket.on("connection", () => console.log(socket.id));
 
-  const values = useMemo<IContext>(() => ({}), []);
+  const values = useMemo<IContext>(() => ({socket}), [socket]);
+
   return <Context.Provider value={values}>{children}</Context.Provider>;
 };

@@ -5,10 +5,10 @@ interface ProviderProps extends Children {}
 
 export const Provider: React.FC<ProviderProps> = ({children}) => {
   return (
-    <ThemeProvider>
-      <RoomProvider>
-        <SocketProvider>{children}</SocketProvider>
-      </RoomProvider>
-    </ThemeProvider>
+    <SocketProvider>
+      <ThemeProvider>
+        <RoomProvider>{children}</RoomProvider>
+      </ThemeProvider>
+    </SocketProvider>
   );
 };

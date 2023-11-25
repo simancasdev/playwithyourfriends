@@ -1,20 +1,15 @@
 import shortid from "shortid";
+import {Player} from "interfaces";
 import {RoomAction, RoomState} from "./types";
 
 const rightAnswerIdMock = shortid.generate();
 
 export const initialState: RoomState = {
-  players: [
-    {
-      name: "Hector",
-    },
-    {
-      name: "Luis",
-    },
-    {
-      name: "Elena",
-    },
-  ],
+  id: undefined,
+  meAsHost: false,
+  connected: false,
+  host: {} as Player,
+  players: [],
   challenge: {
     rightAnswerId: rightAnswerIdMock,
     type: "guess-my-answer",
@@ -32,10 +27,8 @@ export const initialState: RoomState = {
 export function roomReducer(state: RoomState, action: RoomAction) {
   const {type, payload} = action;
   switch (type) {
-    case "":
-      return {
-        ...state,
-      };
+    case "SET_ROOM":
+      return {...state, ...payload, connected: true};
 
     default:
       return state;

@@ -16,3 +16,10 @@ button {
   border: unset;
   outline: unset;
 }
+
+input {
+  background-color: unset;
+  border: unset;
+  outline: unset;
+  font-family: 'Nunito', sans-serif;
+}

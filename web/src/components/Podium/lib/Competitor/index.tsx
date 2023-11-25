@@ -10,12 +10,15 @@ interface CompetitorProps {
 }
 
 export const Competitor: React.FC<CompetitorProps> = ({rank, player}) => {
-  const {name} = player;
+  const {username} = player;
   return (
     <Container
       style={{transform: rank === 1 ? "translateY(-10px)" : undefined}}
     >
-      <Avatar name={name} nameStyle={{fontSize: "1.3rem", fontWeight: "600"}} />
+      <Avatar
+        name={username}
+        nameStyle={{fontSize: "1.3rem", fontWeight: "600"}}
+      />
       {rank <= 3 && <Tie src={rank === 1 ? tie1st : tie} />}
     </Container>
   );

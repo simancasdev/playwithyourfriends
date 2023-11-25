@@ -1,3 +1,3 @@
-export interface Children {
-  children: JSX.Element | string | (JSX.Element | string)[];
+export interface Children<T = JSX.Element | string | (JSX.Element | string)[]> {
+  children: T;
 }

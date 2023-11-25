@@ -10,8 +10,8 @@ export const Players: React.FC<PlayersProps> = ({players}) => {
   return (
     <Section title="Jugadores">
       <Grid>
-        {players.map(({name}, key) => (
-          <Gamer key={key} name={name} />
+        {players.map(({username}, key) => (
+          <Gamer key={key} username={username} />
         ))}
       </Grid>
     </Section>

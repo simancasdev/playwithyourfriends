@@ -1,7 +1,9 @@
 import clsx from "clsx";
+import {Button} from "styles";
 import {useState} from "react";
+import {useRoom} from "context";
 import {Answer as IAnswer} from "interfaces";
-import {Container, Answer, Column, Index, Value, Button} from "./styled";
+import {Container, Answer, Column, Index, Value} from "./styled";
 
 const indexes: {[index: number]: string} = {
   0: "a",
@@ -15,6 +17,7 @@ interface AnswersProps {
 }
 
 export const Answers: React.FC<AnswersProps> = ({answers}) => {
+  const {sendAnswer} = useRoom();
   const [answerSelected, setAnswerSelected] = useState<string | undefined>();
 
   return (
@@ -32,7 +35,15 @@ export const Answers: React.FC<AnswersProps> = ({answers}) => {
           </Answer>
         ))}
       </Column>
-      {answerSelected && <Button>Enviar</Button>}
+      {answerSelected && (
+        <Button
+          onClick={() => {
+            sendAnswer({userId: "1", answerId: answerSelected});
+          }}
+        >
+          Enviar
+        </Button>
+      )}
     </Container>
   );
 };

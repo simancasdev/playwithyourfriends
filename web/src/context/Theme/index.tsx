@@ -1,6 +1,6 @@
 import {useDeviceTheme} from "hooks";
 import {getInitialSchema} from "./helper";
-import {createContext, useMemo} from "react";
+import {createContext, useContext, useMemo} from "react";
 import {Children, ColorSchema} from "interfaces";
 
 type IContext = {
@@ -10,6 +10,8 @@ type IContext = {
 const Context = createContext<IContext>({
   theme: getInitialSchema(),
 });
+
+export const useTheme = () => useContext(Context);
 
 interface ThemeProviderProps extends Children {}
 

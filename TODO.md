@@ -4,3 +4,5 @@
 4. .. formik
 5. .. create server with socket
 6. .. work on the room context
+7. Fix the react router and the context provider
+8. Fix the any on the reducer
