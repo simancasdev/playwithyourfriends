@@ -1,4 +1,3 @@
-import shortid from "shortid";
 import {useSocket} from "context";
 import {Children, Room} from "interfaces";
 import {initialState, roomReducer} from "./reducer";
@@ -15,6 +14,7 @@ import {
 
 const Context = createContext<RoomContext>({
   ...initialState,
+  joinRoom: () => {},
   sendAnswer: () => {},
   createRoom: () => {},
   updateChallenge: () => {},
@@ -27,7 +27,7 @@ interface RoomProviderProps extends Children {}
 
 export const RoomProvider: React.FC<RoomProviderProps> = ({children}) => {
   const {socket} = useSocket();
-  const location = useParams();
+  const params = useParams<{roomId: string}>();
   const navigate = useNavigate();
   const [state, dispatch] = useReducer(roomReducer, initialState);
 
@@ -55,9 +55,15 @@ export const RoomProvider: React.FC<RoomProviderProps> = ({children}) => {
    * @function createRoom
    */
   const createRoom = useCallback((username: string) => {
-    const roomId: string = shortid.generate();
-    const playerId: string = shortid.generate();
-    socket.emit("@create-room", {username, roomId, playerId});
+    socket.emit("@create-room", {username});
+  }, []);
+
+  /**
+   * @function joinRoom
+   */
+  const joinRoom = useCallback((username: string) => {
+    const {roomId} = params;
+    socket.emit("@join-room", {roomId, username});
   }, []);
 
   useEffect(() => {
@@ -65,16 +71,16 @@ export const RoomProvider: React.FC<RoomProviderProps> = ({children}) => {
       dispatch({type: "SET_ROOM", payload: {...payload, meAsHost: true}});
       navigate(`/room/${payload["id"]}`);
     });
-  }, []);
 
-  // useEffect(() => {
-  //   console.log(location);
-  //   socket.emit("@join-room", location["roomId"]);
-  // }, [location]);
+    socket.on("@room-joined", (payload: Room) => {
+      dispatch({type: "SET_ROOM", payload});
+    });
+  }, []);
 
   const values = useMemo<RoomState & RoomMethods>(
     () => ({
       ...state,
+      joinRoom,
       createRoom,
       sendAnswer,
       updateChallenge,

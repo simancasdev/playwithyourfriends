@@ -16,8 +16,8 @@ export const Welcome: React.FC<WelcomeProps> = () => {
         autoFocus
         label="Tu nombre"
         placeholder="Hector"
-        onChange={(event) => {
-          setUsername(event.target.value);
+        onChange={({target}) => {
+          setUsername(target.value);
         }}
       />
       <Button

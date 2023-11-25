@@ -10,6 +10,7 @@ export interface RoomAction {
 export interface RoomMethods {
   updateChallenge: () => void;
   updatePlayerList: () => void;
+  joinRoom: (username: string) => void;
   createRoom: (username: string) => void;
   sendAnswer: (payload: SendAnswerPayload) => void;
 }
