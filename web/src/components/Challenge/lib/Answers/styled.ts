@@ -12,6 +12,11 @@ export const Answer = styled.button`
   color: ${COLORS["white"]};
   border-radius: 8px;
   transition: all ease 0.3s;
+
+  &.selected {
+    background-color: ${COLORS["secondary"]};
+  }
+
   &:active {
     transform: scale(0.98);
   }
@@ -21,6 +26,7 @@ export const Column = styled.div`
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
+  margin-bottom: 1rem;
 `;
 
 export const Value = styled.span`
@@ -40,4 +46,13 @@ export const Index = styled.div`
   font-size: 1.1rem;
   font-weight: bold;
   color: ${COLORS["white"]};
+`;
+
+export const Button = styled.button`
+  color: ${COLORS["white"]};
+  font-size: 1.3rem;
+  background-color: ${COLORS["primary"]};
+  padding: 0.8rem;
+  width: 100%;
+  border-radius: 0.5rem;
 `;
