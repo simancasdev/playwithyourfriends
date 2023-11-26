@@ -1,14 +1,16 @@
 import {Children} from "interfaces";
-import {ThemeProvider, RoomProvider, SocketProvider} from ".";
+import {ThemeProvider, RoomProvider, SocketProvider, ModalProvider} from ".";
 
 interface ProviderProps extends Children {}
 
 export const Provider: React.FC<ProviderProps> = ({children}) => {
   return (
-    <SocketProvider>
-      <ThemeProvider>
-        <RoomProvider>{children}</RoomProvider>
-      </ThemeProvider>
-    </SocketProvider>
+    <ModalProvider>
+      <SocketProvider>
+        <ThemeProvider>
+          <RoomProvider>{children}</RoomProvider>
+        </ThemeProvider>
+      </SocketProvider>
+    </ModalProvider>
   );
 };

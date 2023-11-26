@@ -4,17 +4,17 @@ import {Container, AnswerField, AddMoreButton, AddMore} from "./styled";
 import {CheckCircle, Circle, IconProps, Plus, Trash} from "react-feather";
 import {
   iconProps,
-  DEFAULT_ANSWER,
   PossibleAnswer,
   MAX_ANSWERS_ALLOWED,
+  createDefaultAnswer,
 } from "./helper";
 
 interface PossibleAnswersProps {}
 
 export const PossibleAnswers: React.FC<PossibleAnswersProps> = () => {
   const [answers, setAnswers] = useState<PossibleAnswer[]>([
-    DEFAULT_ANSWER,
-    DEFAULT_ANSWER,
+    createDefaultAnswer(),
+    createDefaultAnswer(),
   ]);
 
   const onChange = (
@@ -22,16 +22,19 @@ export const PossibleAnswers: React.FC<PossibleAnswersProps> = () => {
     value: string | undefined,
     checked: boolean
   ): void => {
-    setAnswers((prev) => {
-      const answer = prev[index];
-      if (value) {
-        answer.value = value;
+    const updated = answers.map((answer, key) => {
+      if (key === index) {
+        if (value) {
+          answer = {...answer, value};
+        } else {
+          answer = {...answer, correctAnswer: checked};
+        }
+        return answer;
       } else {
-        answer.correctAnswer = checked;
+        return answer;
       }
-      prev[index] = answer;
-      return [...prev];
     });
+    setAnswers(updated);
   };
 
   return (
@@ -39,11 +42,13 @@ export const PossibleAnswers: React.FC<PossibleAnswersProps> = () => {
       <Typography variant="subtitle" style={{marginBottom: 10}}>
         Respuestas
       </Typography>
-      {answers.map(({correctAnswer, value}, key) => {
+      {answers.map(({correctAnswer, value, id}, key) => {
         const Icon: React.FC<IconProps> = correctAnswer ? CheckCircle : Circle;
         return (
           <AnswerField key={key}>
             <Field
+              name="value"
+              value={value}
               placeholder={`Respuesta ${key + 1}`}
               onChange={({target}) => {
                 onChange(key, target["value"], correctAnswer);
@@ -55,14 +60,12 @@ export const PossibleAnswers: React.FC<PossibleAnswersProps> = () => {
                 onChange(key, undefined, !correctAnswer);
               }}
             />
-            {answers.length !== 1 && (
+            {answers.length > 2 && (
               <Trash
                 {...iconProps}
                 color="red"
                 onClick={() => {
-                  setAnswers((prev) =>
-                    prev.filter((_, index) => index !== key)
-                  );
+                  setAnswers(answers.filter((item) => item.id !== id));
                 }}
               />
             )}
@@ -74,7 +77,7 @@ export const PossibleAnswers: React.FC<PossibleAnswersProps> = () => {
           onClick={() => {
             setAnswers((prev) => {
               if (prev.length === MAX_ANSWERS_ALLOWED) return prev;
-              return [...prev, DEFAULT_ANSWER];
+              return [...prev, createDefaultAnswer()];
             });
           }}
         >

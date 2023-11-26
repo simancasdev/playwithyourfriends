@@ -1,3 +1,4 @@
+export * from "./Modal";
 export * from "./Provider";
 export * from "./Room";
 export * from "./Socket";

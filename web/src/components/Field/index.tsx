@@ -4,6 +4,7 @@ import {useTheme} from "context";
 import {COLORS} from "styles";
 
 interface FieldProps {
+  name?: string;
   value?: string;
   label?: string;
   autoFocus?: boolean;
@@ -13,9 +14,10 @@ interface FieldProps {
 }
 
 export const Field: React.FC<FieldProps> = ({
+  name,
   label,
-  onChange,
   value,
+  onChange,
   placeholder,
   autoFocus = false,
   inputType = "text",
@@ -31,6 +33,7 @@ export const Field: React.FC<FieldProps> = ({
         </Label>
       )}
       <Input
+        name={name}
         value={value}
         type={inputType}
         onChange={onChange}

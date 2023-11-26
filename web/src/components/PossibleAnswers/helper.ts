@@ -1,9 +1,14 @@
 import {COLORS} from "styles";
+import shortid from "shortid";
 import {IconProps} from "react-feather";
 
-export type PossibleAnswer = {value: string; correctAnswer: boolean};
+export type PossibleAnswer = {
+  id: string;
+  value: string;
+  correctAnswer: boolean;
+};
 
-export const MAX_ANSWERS_ALLOWED = 4;
+export const MAX_ANSWERS_ALLOWED = 8;
 
 export const iconProps: IconProps = {
   size: 32,
@@ -11,4 +16,10 @@ export const iconProps: IconProps = {
   color: COLORS["white"],
 };
 
-export const DEFAULT_ANSWER: PossibleAnswer = {value: "", correctAnswer: false};
+export const createDefaultAnswer = (): PossibleAnswer => {
+  return {
+    id: shortid.generate(),
+    value: "",
+    correctAnswer: false,
+  };
+};

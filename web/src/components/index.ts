@@ -4,6 +4,7 @@ export * from "./Field";
 export * from "./Github";
 export * from "./Guideline";
 export * from "./Host";
+export * from "./Modal";
 export * from "./Player";
 export * from "./Podium";
 export * from "./PossibleAnswers";

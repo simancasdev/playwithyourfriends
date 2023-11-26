@@ -69,7 +69,7 @@ export const RoomProvider: React.FC<RoomProviderProps> = ({children}) => {
   useEffect(() => {
     socket.on("@room-created", (payload: Room) => {
       dispatch({type: "SET_ROOM", payload: {...payload, meAsHost: true}});
-      navigate(`/room/${payload["id"]}`);
+      navigate(`room/${payload["id"]}`);
     });
 
     socket.on("@room-joined", (payload: Room) => {

@@ -7,3 +7,5 @@
 7. Fix the react router and the context provider
 8. Fix the any on the reducer
 9. Handle socket error when try to join but there's not channel
+10. Refactorizar
+11. Change {} empty objects for default values
