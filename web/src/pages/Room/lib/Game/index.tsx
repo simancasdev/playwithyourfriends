@@ -1,18 +1,18 @@
-import {Players} from "./lib";
 import {useRoom} from "context";
+import {Host} from "components";
 import {Layout, Header} from "./styled";
-import {Challenge, Host} from "components";
+import {Players, Challenge, CreateChallenge} from "./lib";
 
 interface GameProps {}
 
 export const Game: React.FC<GameProps> = () => {
-  const {players} = useRoom();
+  const {players, meAsHost} = useRoom();
   return (
     <Layout>
       <Header>
         <Host />
       </Header>
-      <Challenge />
+      {meAsHost ? <CreateChallenge /> : <Challenge />}
       <Players players={players} />
     </Layout>
   );

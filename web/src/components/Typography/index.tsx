@@ -16,7 +16,7 @@ const stylesByVariant: {[V in TypographyVariant]: CSSProperties} = {
     fontWeight: "600",
   },
   regular: {
-    fontSize: 14,
+    fontSize: 16,
   },
 };
 

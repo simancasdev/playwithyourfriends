@@ -43,8 +43,12 @@ io.on("connection", (socket) => {
         username,
         id: shortid.generate(),
       };
+
+      // update database
       db.rooms[roomIndex]["players"].push(newPlayer);
+      // notify users
       socket.emit("@room-joined", db.rooms[roomIndex]);
+      socket.broadcast.emit("@room-joined", db.rooms[roomIndex]);
     }
   });
 

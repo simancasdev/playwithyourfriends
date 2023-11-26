@@ -15,6 +15,6 @@ export const Button = styled.button`
   }
   &:disabled {
     color: rgba(255, 255, 255, 0.3);
-    background-color: #3869fc3d;
+    background-color: ${COLORS["disabled"]};
   }
 `;

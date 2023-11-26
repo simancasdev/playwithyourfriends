@@ -86,7 +86,7 @@ export const RoomProvider: React.FC<RoomProviderProps> = ({children}) => {
       updateChallenge,
       updatePlayerList,
     }),
-    []
+    [state]
   );
 
   useEffect(() => {
