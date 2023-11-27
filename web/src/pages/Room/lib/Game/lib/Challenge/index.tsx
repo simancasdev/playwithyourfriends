@@ -9,7 +9,7 @@ export const Challenge: React.FC<ChallengeProps> = () => {
   const {answers, question} = challenge;
   return (
     <Section title="Desafío">
-      <Question>{question["value"]}</Question>
+      <Question>{question}</Question>
       <Timer />
       <Answers answers={answers} />
     </Section>

@@ -1,30 +1,28 @@
-import {useState} from "react";
+import {Answer} from "interfaces";
+import {useEffect, useState} from "react";
 import {Field, Typography} from "components";
 import {Container, AnswerField, AddMoreButton, AddMore} from "./styled";
 import {CheckCircle, Circle, IconProps, Plus, Trash} from "react-feather";
-import {
-  iconProps,
-  PossibleAnswer,
-  MAX_ANSWERS_ALLOWED,
-  createDefaultAnswer,
-} from "./helper";
+import {iconProps, MAX_ANSWERS_ALLOWED, createDefaultAnswer} from "./helper";
 
-interface PossibleAnswersProps {}
+interface PossibleAnswersProps {
+  onChange: (answers: Answer[]) => void;
+}
 
-export const PossibleAnswers: React.FC<PossibleAnswersProps> = () => {
-  const [answers, setAnswers] = useState<PossibleAnswer[]>([
+export const PossibleAnswers: React.FC<PossibleAnswersProps> = ({onChange}) => {
+  const [answers, setAnswers] = useState<Answer[]>([
     createDefaultAnswer(),
     createDefaultAnswer(),
   ]);
 
-  const onChange = (
+  const onUpdate = (
     index: number,
     value: string | undefined,
     checked: boolean
   ): void => {
     const updated = answers.map((answer, key) => {
       if (key === index) {
-        if (value) {
+        if (value || value === "") {
           answer = {...answer, value};
         } else {
           answer = {...answer, correctAnswer: checked};
@@ -36,6 +34,10 @@ export const PossibleAnswers: React.FC<PossibleAnswersProps> = () => {
     });
     setAnswers(updated);
   };
+
+  useEffect(() => {
+    onChange(answers);
+  }, [answers]);
 
   return (
     <Container>
@@ -51,13 +53,13 @@ export const PossibleAnswers: React.FC<PossibleAnswersProps> = () => {
               value={value}
               placeholder={`Respuesta ${key + 1}`}
               onChange={({target}) => {
-                onChange(key, target["value"], correctAnswer);
+                onUpdate(key, target["value"], correctAnswer);
               }}
             />
             <Icon
               {...iconProps}
               onClick={() => {
-                onChange(key, undefined, !correctAnswer);
+                onUpdate(key, undefined, !correctAnswer);
               }}
             />
             {answers.length > 2 && (
@@ -65,7 +67,7 @@ export const PossibleAnswers: React.FC<PossibleAnswersProps> = () => {
                 {...iconProps}
                 color="red"
                 onClick={() => {
-                  setAnswers(answers.filter((item) => item.id !== id));
+                  setAnswers(answers.filter((answer) => answer.id !== id));
                 }}
               />
             )}

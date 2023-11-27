@@ -2,7 +2,7 @@ import shortid from "shortid";
 import {Player} from "interfaces";
 import {RoomAction, RoomState} from "./types";
 
-const rightAnswerIdMock = shortid.generate();
+const correctAnswerIdMock = shortid.generate();
 
 export const initialState: RoomState = {
   id: undefined,
@@ -11,16 +11,10 @@ export const initialState: RoomState = {
   host: {} as Player,
   players: [],
   challenge: {
-    rightAnswerId: rightAnswerIdMock,
+    correctAnswerId: correctAnswerIdMock,
     type: "guess-my-answer",
-    question: {
-      id: shortid.generate(),
-      value: "Cual es mi serie favorita?",
-    },
-    answers: [
-      {id: shortid.generate(), value: "naruto"},
-      {id: rightAnswerIdMock, value: "the big bang theory"},
-    ],
+    question: "",
+    answers: [],
   },
 };
 

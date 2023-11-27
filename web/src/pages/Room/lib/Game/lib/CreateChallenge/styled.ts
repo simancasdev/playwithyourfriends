@@ -17,7 +17,7 @@ export const Head = styled.div`
 export const Body = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 1.2rem;
 `;
 
 export const FormStyled = styled.div`
