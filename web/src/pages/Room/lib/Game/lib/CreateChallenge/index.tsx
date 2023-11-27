@@ -27,6 +27,7 @@ export const CreateChallenge: React.FC<CreateChallengeProps> = () => {
 interface FormProps {}
 
 export const Form: React.FC<FormProps> = () => {
+  const {onClose} = useModal();
   const [disabled, setDisabled] = useState<boolean>(true);
   const [challenge, setChallenge] = useState<Challenge>({
     answers: [],
@@ -64,7 +65,7 @@ export const Form: React.FC<FormProps> = () => {
     <FormStyled>
       <Head>
         <Typography variant="title">Crear desafío</Typography>
-        <Close onClick={() => {}} />
+        <Close onClick={onClose} />
       </Head>
       <Body>
         <Field

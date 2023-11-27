@@ -4,11 +4,13 @@ import {useMemo, useContext, createContext, useCallback, useState} from "react";
 type IContext = {
   element: JSX.Element | undefined;
   openModal: (element: JSX.Element) => void;
+  onClose: () => void;
 };
 
 const Context = createContext<IContext>({
   element: undefined,
   openModal: () => {},
+  onClose: () => {},
 });
 
 export const useModal = () => useContext(Context);
@@ -22,7 +24,14 @@ export const ModalProvider: React.FC<ModalProviderProps> = ({children}) => {
     setElement(element);
   }, []);
 
-  const values = useMemo<IContext>(() => ({element, openModal}), [element]);
+  const onClose = useCallback(() => {
+    setElement(undefined);
+  }, []);
+
+  const values = useMemo<IContext>(
+    () => ({element, openModal, onClose}),
+    [element]
+  );
 
   return <Context.Provider value={values}>{children}</Context.Provider>;
 };
