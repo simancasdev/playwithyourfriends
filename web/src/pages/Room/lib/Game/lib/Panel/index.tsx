@@ -89,7 +89,6 @@ export const Form: React.FC<FormProps> = () => {
         <Button
           disabled={disabled}
           onClick={() => {
-            console.log(sendChallenge);
             sendChallenge(challenge);
           }}
         >

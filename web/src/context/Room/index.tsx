@@ -93,7 +93,6 @@ export const RoomProvider: React.FC<RoomProviderProps> = ({children}) => {
     });
 
     socket.on("@challenge-created", (payload: Challenge) => {
-      console.log("payload", payload);
       dispatch({type: "SET_CHALLENGE", payload});
     });
   }, []);

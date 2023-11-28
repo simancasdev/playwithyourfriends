@@ -62,10 +62,8 @@ io.on("connection", (socket) => {
     "@send-challenge",
     (data: {challenge: Challenge; roomId: string}) => {
       const {roomId, challenge} = data;
-      console.log("data", data);
-
       const roomIndex = db["rooms"].findIndex((room) => room["id"] === roomId);
-      console.log("roomIndex", roomIndex);
+
       if (roomIndex !== -1) {
         // update database
         db.rooms[roomIndex]["challenge"] = challenge;
