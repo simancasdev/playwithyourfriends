@@ -1,26 +1,31 @@
 import {Button} from "styles";
-import {useModal} from "context";
+import {useModal, useRoom} from "context";
 import {checkEmptyFields} from "./helper";
 import {useEffect, useState} from "react";
 import {Answer, Challenge} from "interfaces";
-import {Body, Container, FormStyled, Head} from "./styled";
+import {Body, Container, FormStyled, Head, Waiting} from "./styled";
 import {Close, Field, PossibleAnswers, Typography} from "components";
 
-interface CreateChallengeProps {}
+interface PanelProps {}
 
-export const CreateChallenge: React.FC<CreateChallengeProps> = () => {
+export const Panel: React.FC<PanelProps> = () => {
+  const {waitingForAnswers} = useRoom();
   const {openModal} = useModal();
-  return (
+  return !waitingForAnswers ? (
     <Container>
       <Typography>Tus participantes estan esperando el desafío</Typography>
       <Button
         onClick={() => {
-          openModal(<Form />);
+          openModal(<Form />, {containerStyle: {alignItems: "center"}});
         }}
       >
         Crear desafío
       </Button>
     </Container>
+  ) : (
+    <Waiting>
+      <Typography variant="title">Esperando respuestas...</Typography>
+    </Waiting>
   );
 };
 
@@ -28,6 +33,7 @@ interface FormProps {}
 
 export const Form: React.FC<FormProps> = () => {
   const {onClose} = useModal();
+  const {sendChallenge} = useRoom();
   const [disabled, setDisabled] = useState<boolean>(true);
   const [challenge, setChallenge] = useState<Challenge>({
     answers: [],
@@ -80,7 +86,13 @@ export const Form: React.FC<FormProps> = () => {
             onChange("answers", answers);
           }}
         />
-        <Button disabled={disabled} onClick={() => {}}>
+        <Button
+          disabled={disabled}
+          onClick={() => {
+            console.log(sendChallenge);
+            sendChallenge(challenge);
+          }}
+        >
           Enviar desafío
         </Button>
       </Body>

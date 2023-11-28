@@ -1,7 +1,8 @@
-import {Player} from "./player";
+import {Challenge, Player} from ".";
 
 export type Room = {
   id: string;
   host: Player;
   players: Player[];
+  challenge: Challenge | undefined;
 };

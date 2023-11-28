@@ -26,3 +26,9 @@ export const FormStyled = styled.div`
   width: 100%;
   padding: 1rem;
 `;
+
+export const Waiting = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;

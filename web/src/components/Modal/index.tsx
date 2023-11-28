@@ -5,6 +5,10 @@ import {Modal as ModalStyled} from "./styled";
 interface ModalProps {}
 
 export const Modal: React.FC<ModalProps> = () => {
-  const {element} = useModal();
-  return element ? <ModalStyled>{element}</ModalStyled> : <Fragment />;
+  const {element, config} = useModal();
+  return element ? (
+    <ModalStyled style={config["containerStyle"]}>{element}</ModalStyled>
+  ) : (
+    <Fragment />
+  );
 };

@@ -20,7 +20,7 @@ const stylesByVariant: {[V in TypographyVariant]: CSSProperties} = {
   },
 };
 
-interface TypographyProps extends Children<string> {
+interface TypographyProps extends Children<any> {
   variant?: TypographyVariant;
   style?: CSSProperties;
 }

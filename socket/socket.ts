@@ -3,7 +3,7 @@ import cors from "cors";
 import shortid from "shortid";
 import express from "express";
 import {Server} from "socket.io";
-import {DB, Player, Room} from "./interfaces";
+import {Answer, Challenge, DB, Player, Room} from "./interfaces";
 
 const PORT = process.env.PORT || 8090;
 const app = express();
@@ -29,7 +29,12 @@ io.on("connection", (socket) => {
       id: shortid.generate(),
     };
 
-    const newRoom: Room = {id: shortid.generate(), players: [], host};
+    const newRoom: Room = {
+      host,
+      players: [],
+      challenge: undefined,
+      id: shortid.generate(),
+    };
     db.rooms.push(newRoom);
 
     socket.emit("@room-created", newRoom);
@@ -47,14 +52,49 @@ io.on("connection", (socket) => {
       // update database
       db.rooms[roomIndex]["players"].push(newPlayer);
       // notify users
-      socket.emit("@room-joined", db.rooms[roomIndex]);
-      socket.broadcast.emit("@room-joined", db.rooms[roomIndex]);
+      const payload = {room: db.rooms[roomIndex], player: newPlayer};
+      socket.emit("@room-joined", payload);
+      socket.broadcast.emit("@room-joined", payload);
     }
   });
 
-  // socket.on("send-answer", (socket) => {
-  //   console.log("YEAH!");
-  // });
+  socket.on(
+    "@send-challenge",
+    (data: {challenge: Challenge; roomId: string}) => {
+      const {roomId, challenge} = data;
+      console.log("data", data);
+
+      const roomIndex = db["rooms"].findIndex((room) => room["id"] === roomId);
+      console.log("roomIndex", roomIndex);
+      if (roomIndex !== -1) {
+        // update database
+        db.rooms[roomIndex]["challenge"] = challenge;
+        socket.broadcast.emit(
+          "@challenge-created",
+          db.rooms[roomIndex]["challenge"]
+        );
+      }
+    }
+  );
+
+  socket.on(
+    "@send-answer",
+    (data: {answer: Answer; player: Player; roomId: string}) => {
+      const {answer, player} = data;
+      console.log(answer);
+      console.log(player);
+
+      // const roomIndex = db["rooms"].findIndex((room) => room["id"] === roomId);
+      // if (roomIndex !== -1) {
+      //   // update database
+      //   db.rooms[roomIndex]["challenge"] = challenge;
+      //   socket.broadcast.emit(
+      //     "@challenge-created",
+      //     db.rooms[roomIndex]["challenge"]
+      //   );
+      // }
+    }
+  );
 });
 
 server.listen(PORT, () => console.log(`Server is running on port ${PORT}`));

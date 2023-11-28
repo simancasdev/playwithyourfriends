@@ -1,3 +1,3 @@
 export * from "./Challenge";
-export * from "./CreateChallenge";
+export * from "./Panel";
 export * from "./Players";

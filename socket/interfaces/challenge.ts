@@ -1,10 +1,10 @@
-import {Answer, Question} from ".";
+import {Answer} from ".";
 
 export type ChallengeType = "guess-my-answer";
 
 export type Challenge = {
+  question: string;
   answers: Answer[];
-  question: Question;
   type: ChallengeType;
-  rightAnswerId: string;
+  correctAnswerId: string;
 };

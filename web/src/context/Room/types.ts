@@ -1,6 +1,11 @@
-import {Challenge, Player} from "interfaces";
+import {Answer, Challenge, Player} from "interfaces";
 
-export type ActionType = "SET_ROOM";
+export type ActionType =
+  | "SET_ROOM"
+  | "UPDATE_ROOM"
+  | "SET_CHALLENGE"
+  | "WAIT_FOR_ANSWERS"
+  | "SET_NEW_PLAYER_JOINED";
 
 export interface RoomAction {
   type: ActionType;
@@ -8,25 +13,22 @@ export interface RoomAction {
 }
 
 export interface RoomMethods {
-  updateChallenge: () => void;
-  updatePlayerList: () => void;
   joinRoom: (username: string) => void;
+  sendAnswer: (payload: Answer) => void;
   createRoom: (username: string) => void;
-  sendAnswer: (payload: SendAnswerPayload) => void;
+  sendChallenge: (challenge: Challenge) => void;
+  updateRoom: (key: keyof RoomState, value: RoomState[keyof RoomState]) => void;
 }
 
 export interface RoomState {
   host: Player;
+  me: Player;
   meAsHost: boolean;
   players: Player[];
   connected: boolean;
-  challenge: Challenge;
   id: string | undefined;
+  waitingForAnswers: boolean;
+  challenge: Challenge | undefined;
 }
 
 export type RoomContext = RoomMethods & RoomState;
-
-export type SendAnswerPayload = {
-  answerId: string;
-  userId: string;
-};

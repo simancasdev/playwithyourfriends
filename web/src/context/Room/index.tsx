@@ -1,8 +1,8 @@
-import {useSocket} from "context";
-import {Children, Room} from "interfaces";
+import {useModal, useSocket} from "context";
 import {initialState, roomReducer} from "./reducer";
-import {useLocation, useNavigate, useParams} from "react-router-dom";
-import {RoomState, RoomContext, RoomMethods, SendAnswerPayload} from "./types";
+import {useNavigate, useParams} from "react-router-dom";
+import {RoomState, RoomContext, RoomMethods} from "./types";
+import {Answer, Challenge, Children, Player, Room} from "interfaces";
 import {
   useMemo,
   useEffect,
@@ -17,8 +17,8 @@ const Context = createContext<RoomContext>({
   joinRoom: () => {},
   sendAnswer: () => {},
   createRoom: () => {},
-  updateChallenge: () => {},
-  updatePlayerList: () => {},
+  updateRoom: () => {},
+  sendChallenge: () => {},
 });
 
 export const useRoom = () => useContext(Context);
@@ -27,7 +27,8 @@ interface RoomProviderProps extends Children {}
 
 export const RoomProvider: React.FC<RoomProviderProps> = ({children}) => {
   const {socket} = useSocket();
-  const params = useParams<{roomId: string}>();
+  const {onClose} = useModal();
+  const {roomId} = useParams<{roomId: string}>();
   const navigate = useNavigate();
   const [state, dispatch] = useReducer(roomReducer, initialState);
 
@@ -35,21 +36,12 @@ export const RoomProvider: React.FC<RoomProviderProps> = ({children}) => {
    * @function sendAnswer
    */
   const sendAnswer = useCallback(
-    (payload: SendAnswerPayload) => {
-      socket.emit("send-answer", payload);
+    (payload: Answer) => {
+      const {me} = state;
+      socket.emit("@send-answer", {answer: payload, player: me, roomId});
     },
-    [socket]
+    [state, roomId]
   );
-
-  /**
-   * @function updatePlayerList
-   */
-  const updatePlayerList = useCallback(() => {}, []);
-
-  /**
-   * @function updateChallenge
-   */
-  const updateChallenge = useCallback(() => {}, []);
 
   /**
    * @function createRoom
@@ -61,10 +53,34 @@ export const RoomProvider: React.FC<RoomProviderProps> = ({children}) => {
   /**
    * @function joinRoom
    */
-  const joinRoom = useCallback((username: string) => {
-    const {roomId} = params;
-    socket.emit("@join-room", {roomId, username});
-  }, []);
+  const joinRoom = useCallback(
+    (username: string) => {
+      socket.emit("@join-room", {roomId, username});
+    },
+    [roomId]
+  );
+
+  /**
+   * @function updateRoom
+   */
+  const updateRoom = useCallback(
+    (key: keyof RoomState, value: RoomState[keyof RoomState]) => {
+      dispatch({type: "UPDATE_ROOM", payload: {key, value}});
+    },
+    []
+  );
+
+  /**
+   * @function sendChallenge
+   */
+  const sendChallenge = useCallback(
+    (challenge: Challenge) => {
+      socket.emit("@send-challenge", {challenge, roomId});
+      onClose();
+      dispatch({type: "WAIT_FOR_ANSWERS", payload: {waitingForAnswers: true}});
+    },
+    [roomId]
+  );
 
   useEffect(() => {
     socket.on("@room-created", (payload: Room) => {
@@ -72,8 +88,13 @@ export const RoomProvider: React.FC<RoomProviderProps> = ({children}) => {
       navigate(`room/${payload["id"]}`);
     });
 
-    socket.on("@room-joined", (payload: Room) => {
-      dispatch({type: "SET_ROOM", payload});
+    socket.on("@room-joined", (payload: {room: Room; player: Player}) => {
+      dispatch({type: "SET_NEW_PLAYER_JOINED", payload});
+    });
+
+    socket.on("@challenge-created", (payload: Challenge) => {
+      console.log("payload", payload);
+      dispatch({type: "SET_CHALLENGE", payload});
     });
   }, []);
 
@@ -83,8 +104,8 @@ export const RoomProvider: React.FC<RoomProviderProps> = ({children}) => {
       joinRoom,
       createRoom,
       sendAnswer,
-      updateChallenge,
-      updatePlayerList,
+      updateRoom,
+      sendChallenge,
     }),
     [state]
   );

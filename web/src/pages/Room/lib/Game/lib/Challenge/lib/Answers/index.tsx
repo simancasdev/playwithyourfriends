@@ -14,31 +14,34 @@ const indexes: {[index: number]: string} = {
 
 interface AnswersProps {
   answers: IAnswer[];
+  onSelect: (answer: IAnswer) => void;
 }
 
-export const Answers: React.FC<AnswersProps> = ({answers}) => {
+export const Answers: React.FC<AnswersProps> = ({answers, onSelect}) => {
   const {sendAnswer} = useRoom();
-  const [answerSelected, setAnswerSelected] = useState<string | undefined>();
+  const [answerSelected, setAnswerSelected] = useState<IAnswer | undefined>();
 
   return (
     <Container>
       <Column>
-        {answers.map(({value, id}, key) => (
+        {answers.map((answer, key) => (
           <Answer
             key={key}
-            className={clsx(answerSelected === id && "selected")}
+            className={clsx(
+              answerSelected?.["id"] === answer["id"] && "selected"
+            )}
             onClick={() => {
-              setAnswerSelected(id);
+              setAnswerSelected(answer);
             }}
           >
-            <Index>{indexes[key]}</Index> <Value>{value}</Value>
+            <Index>{indexes[key]}</Index> <Value>{answer["value"]}</Value>
           </Answer>
         ))}
       </Column>
       {answerSelected && (
         <Button
           onClick={() => {
-            sendAnswer({userId: "1", answerId: answerSelected});
+            onSelect(answerSelected);
           }}
         >
           Enviar

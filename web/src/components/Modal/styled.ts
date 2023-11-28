@@ -10,5 +10,5 @@ export const Modal = styled.div`
   z-index: 999;
   display: flex;
   justify-content: center;
-  align-items: flex-end;
+  align-items: center;
 `;

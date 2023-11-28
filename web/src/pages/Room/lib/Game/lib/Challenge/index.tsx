@@ -1,17 +1,40 @@
-import {useRoom} from "context";
-import {Section} from "components";
-import {Answers, Question, Timer} from "./lib";
+import {COLORS} from "styles";
+import {useModal, useRoom} from "context";
+import {Section, Notification} from "components";
+import {Answers, Question, Timer, Waiting} from "./lib";
+import {CheckCircle, IconProps, X} from "react-feather";
 
 interface ChallengeProps {}
 
 export const Challenge: React.FC<ChallengeProps> = () => {
-  const {challenge} = useRoom();
-  const {answers, question} = challenge;
-  return (
+  const {openModal} = useModal();
+  const {challenge, sendAnswer} = useRoom();
+
+  return challenge ? (
     <Section title="Desafío">
-      <Question>{question}</Question>
+      <Question>{challenge["question"]}</Question>
       <Timer />
-      <Answers answers={answers} />
+      <Answers
+        answers={challenge["answers"]}
+        onSelect={(answerSelected) => {
+          const {correctAnswer} = answerSelected;
+
+          const Icon: React.FC<IconProps> = correctAnswer ? CheckCircle : X;
+          const message: string = correctAnswer
+            ? "Respuesta correcta"
+            : "Oh, no. Incorrecto";
+
+          openModal(
+            <Notification
+              icon={<Icon size={60} color={COLORS["white"]} />}
+              message={message}
+            />
+          );
+          sendAnswer(answerSelected);
+        }}
+      />
     </Section>
+  ) : (
+    <Waiting />
   );
 };

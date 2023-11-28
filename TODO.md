@@ -9,3 +9,4 @@
 9. Handle socket error when try to join but there's not channel
 10. Refactorizar
 11. Change {} empty objects for default values
+12. Update interfaces on both sides
