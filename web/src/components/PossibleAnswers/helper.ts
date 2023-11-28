@@ -8,7 +8,8 @@ export const MAX_ANSWERS_ALLOWED = 4;
 export const iconProps: IconProps = {
   size: 32,
   strokeWidth: 2,
-  color: COLORS["white"],
+  color: COLORS["black"],
+  cursor: "pointer",
 };
 
 export const createDefaultAnswer = (): Answer => ({

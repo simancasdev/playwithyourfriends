@@ -14,7 +14,7 @@ export const Notification: React.FC<NotificationProps> = ({icon, message}) => {
   useEffect(() => {
     setTimeout(() => {
       onClose();
-    }, 3000);
+    }, 2000);
   }, []);
 
   return (

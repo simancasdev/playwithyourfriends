@@ -4,6 +4,7 @@ import {Field, Typography} from "components";
 import {Container, AnswerField, AddMoreButton, AddMore} from "./styled";
 import {CheckCircle, Circle, IconProps, Plus, Trash} from "react-feather";
 import {iconProps, MAX_ANSWERS_ALLOWED, createDefaultAnswer} from "./helper";
+import {COLORS} from "styles";
 
 interface PossibleAnswersProps {
   onChange: (answers: Answer[]) => void;
@@ -41,7 +42,7 @@ export const PossibleAnswers: React.FC<PossibleAnswersProps> = ({onChange}) => {
 
   return (
     <Container>
-      <Typography variant="subtitle" style={{marginBottom: 10}}>
+      <Typography variant="title" style={{marginBottom: 5}}>
         Respuestas
       </Typography>
       {answers.map(({correctAnswer, value, id}, key) => {
@@ -85,12 +86,14 @@ export const PossibleAnswers: React.FC<PossibleAnswersProps> = ({onChange}) => {
         >
           <AddMoreButton>
             <Plus
-              size={20}
+              size={18}
               strokeWidth={5}
               style={{transform: "translateY(2.5px)"}}
             />
           </AddMoreButton>
-          <Typography style={{fontWeight: "600", fontSize: 18}}>
+          <Typography
+            style={{fontWeight: "700", fontSize: 18, color: COLORS["primary"]}}
+          >
             Agregar otra opción
           </Typography>
         </AddMore>

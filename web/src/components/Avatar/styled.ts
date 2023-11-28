@@ -6,7 +6,7 @@ export const Container = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.2rem;
 `;
 
 export const Image = styled.img`
@@ -15,5 +15,5 @@ export const Image = styled.img`
 `;
 
 export const Name = styled.span`
-  color: ${COLORS["white"]};
+  font-weight: 700;
 `;

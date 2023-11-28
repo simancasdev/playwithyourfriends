@@ -21,14 +21,15 @@ export const Body = styled.div`
 `;
 
 export const FormStyled = styled.div`
-  height: 80vh;
-  background-color: ${COLORS["black"]};
-  width: 100%;
-  padding: 1rem;
+  background-color: ${COLORS["white"]};
+  width: 600px;
+  border-radius: 12px;
+  padding: 2rem;
 `;
 
 export const Waiting = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  gap: 5px;
 `;

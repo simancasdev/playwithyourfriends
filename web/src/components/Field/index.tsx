@@ -25,13 +25,7 @@ export const Field: React.FC<FieldProps> = ({
   const {theme} = useTheme();
   return (
     <Container>
-      {label && (
-        <Label
-          style={{color: theme === "dark" ? COLORS["white"] : COLORS["black"]}}
-        >
-          {label}
-        </Label>
-      )}
+      {label && <Label>{label}</Label>}
       <Input
         name={name}
         value={value}

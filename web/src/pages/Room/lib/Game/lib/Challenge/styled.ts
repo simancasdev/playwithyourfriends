@@ -1,8 +1,6 @@
 import styled from "styled-components";
 
-export const Container = styled.div`
+export const Head = styled.div`
   display: flex;
-  justify-content: center;
   align-items: center;
-  gap: 5px;
 `;

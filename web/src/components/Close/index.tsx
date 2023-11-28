@@ -9,7 +9,7 @@ interface CloseProps {
 export const Close: React.FC<CloseProps> = ({onClick}) => {
   return (
     <Container onClick={onClick}>
-      <X color={COLORS["white"]} />
+      <X color={COLORS["black"]} />
     </Container>
   );
 };

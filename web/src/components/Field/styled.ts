@@ -9,15 +9,15 @@ export const Container = styled.div`
 `;
 
 export const Label = styled.label`
-  font-weight: 500;
-  font-size: 1.1rem;
+  font-weight: 700;
+  font-size: 1.3rem;
 `;
 
 export const Input = styled.input`
   padding: 1rem;
-  color: #fff;
   border-radius: 0.5rem;
-  font-size: 1.2rem;
-  border: 1px solid rgba(255, 255, 255, 0.5);
-  font-weight: bold;
+  background-color: rgba(0, 0, 0, 0.02);
+  font-size: 1.3rem;
+  border: 1px solid rgba(0, 0, 0, 0.3);
+  font-weight: 600;
 `;

@@ -4,6 +4,7 @@ import {AnswerHistory} from "..";
 import {useEffect, useState} from "react";
 import {useModal, useRoom} from "context";
 import {checkEmptyFields} from "./helper";
+import {Blocks} from "react-loader-spinner";
 import {Answer, Challenge} from "interfaces";
 import {Body, Container, FormStyled, Head, Waiting} from "./styled";
 import {Close, Field, PossibleAnswers, Typography} from "components";
@@ -31,6 +32,14 @@ export const Panel: React.FC<PanelProps> = () => {
     </Container>
   ) : (
     <Waiting>
+      <Blocks
+        visible={true}
+        height={40}
+        width={40}
+        ariaLabel="blocks-loading"
+        wrapperStyle={{}}
+        wrapperClass="blocks-wrapper"
+      />
       <Typography variant="title">Esperando respuestas...</Typography>
     </Waiting>
   );
@@ -78,7 +87,9 @@ export const Form: React.FC<FormProps> = () => {
   return (
     <FormStyled>
       <Head>
-        <Typography variant="title">Crear desafío</Typography>
+        <Typography variant="title" style={{fontSize: 32}}>
+          Crear desafío
+        </Typography>
         <Close onClick={onClose} />
       </Head>
       <Body>

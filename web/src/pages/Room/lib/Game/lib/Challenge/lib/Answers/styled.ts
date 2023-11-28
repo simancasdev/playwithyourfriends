@@ -14,6 +14,9 @@ export const Answer = styled(Button)`
 
   &.selected {
     background-color: ${COLORS["secondary"]};
+    span {
+      color: ${COLORS["white"]};
+    }
   }
 `;
 
@@ -25,7 +28,7 @@ export const Column = styled.div`
 `;
 
 export const Value = styled.span`
-  color: ${COLORS["white"]};
+  color: ${COLORS["black"]};
   font-size: 1.3rem;
 `;
 

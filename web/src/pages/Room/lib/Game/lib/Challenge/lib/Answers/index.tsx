@@ -1,7 +1,6 @@
 import clsx from "clsx";
 import {Button} from "styles";
 import {useState} from "react";
-import {useRoom} from "context";
 import {Answer as IAnswer} from "interfaces";
 import {Container, Answer, Column, Index, Value} from "./styled";
 
@@ -18,7 +17,6 @@ interface AnswersProps {
 }
 
 export const Answers: React.FC<AnswersProps> = ({answers, onSelect}) => {
-  const {sendAnswer} = useRoom();
   const [answerSelected, setAnswerSelected] = useState<IAnswer | undefined>();
 
   return (

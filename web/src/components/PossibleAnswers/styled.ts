@@ -14,12 +14,13 @@ export const AddMore = styled.div`
   display: flex;
   margin-top: 1rem;
   align-items: center;
-  gap: 15px;
+  gap: 10px;
+  cursor: pointer;
 `;
 
 export const AddMoreButton = styled(Button)`
-  width: 40px;
-  height: 40px;
+  width: 35px;
+  height: 35px;
   padding: 0 !important;
   border-radius: 100%;
 `;

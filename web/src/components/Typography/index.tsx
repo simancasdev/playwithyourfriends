@@ -1,6 +1,4 @@
 import {Text} from "./styled";
-import {COLORS} from "styles";
-import {useTheme} from "context";
 import {Children} from "interfaces";
 import {CSSProperties} from "react";
 
@@ -30,12 +28,10 @@ export const Typography: React.FC<TypographyProps> = ({
   variant = "regular",
   style,
 }) => {
-  const {theme} = useTheme();
   return (
     <Text
       style={{
         ...stylesByVariant[variant],
-        color: theme === "dark" ? COLORS["white"] : COLORS["black"],
         ...style,
       }}
     >

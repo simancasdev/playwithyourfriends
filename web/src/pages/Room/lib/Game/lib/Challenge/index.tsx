@@ -1,8 +1,9 @@
+import {Head} from "./styled";
 import {COLORS} from "styles";
 import {useModal, useRoom} from "context";
-import {Section, Notification} from "components";
 import {Answers, Question, Timer, Waiting} from "./lib";
 import {CheckCircle, IconProps, X} from "react-feather";
+import {Section, Notification, Guideline} from "components";
 
 interface ChallengeProps {}
 
@@ -12,13 +13,15 @@ export const Challenge: React.FC<ChallengeProps> = () => {
 
   return challenge ? (
     <Section title="Desafío">
-      <Question>{challenge["question"]}</Question>
-      <Timer />
+      <Head>
+        <Timer />
+        <Question>{challenge["question"]}</Question>
+      </Head>
+      <Guideline>Opciones</Guideline>
       <Answers
         answers={challenge["answers"]}
         onSelect={(answerSelected) => {
           const {correctAnswer} = answerSelected;
-
           const Icon: React.FC<IconProps> = correctAnswer ? CheckCircle : X;
           const message: string = correctAnswer
             ? "Respuesta correcta"
@@ -26,8 +29,13 @@ export const Challenge: React.FC<ChallengeProps> = () => {
 
           openModal(
             <Notification
-              icon={<Icon size={60} color={COLORS["white"]} />}
               message={message}
+              icon={
+                <Icon
+                  size={60}
+                  color={COLORS[correctAnswer ? "green" : "red"]}
+                />
+              }
             />
           );
           sendAnswer(answerSelected);

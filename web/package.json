@@ -17,6 +17,7 @@
     "react-countdown-circle-timer": "^3.2.1",
     "react-dom": "^18.2.0",
     "react-feather": "^2.0.10",
+    "react-loader-spinner": "^5.4.5",
     "react-router-dom": "^6.20.0",
     "react-scripts": "5.0.1",
     "shortid": "^2.2.16",

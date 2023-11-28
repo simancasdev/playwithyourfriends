@@ -8,7 +8,7 @@ interface PlayerProps {
 export const Player: React.FC<PlayerProps> = ({username}) => {
   return (
     <Container>
-      <Avatar name={username} />
+      <Avatar name={username} nameStyle={{fontSize: 28}} />
       <Badge />
     </Container>
   );
