@@ -12,12 +12,12 @@ import {
 } from "interfaces";
 import {
   useMemo,
+  Reducer,
   useEffect,
   useContext,
   useReducer,
   useCallback,
   createContext,
-  Reducer,
 } from "react";
 
 const Context = createContext<RoomContext>({
@@ -100,14 +100,21 @@ export const RoomProvider: React.FC<RoomProviderProps> = ({children}) => {
   );
 
   useEffect(() => {
-    socket.on("@room-created", (payload: Room) => {
-      dispatch({type: "SET_ROOM", payload: {...payload, meAsHost: true}});
-      navigate(`room/${payload["id"]}`);
+    socket.on("@room-created", (payload: {room: Room; host: Player}) => {
+      const {room, host} = payload;
+      dispatch({
+        type: "SET_ROOM",
+        payload: {...payload.room, me: host, meAsHost: true},
+      });
+      navigate(`room/${room["id"]}`);
     });
 
-    socket.on("@room-joined", (payload: {room: Room; player: Player}) => {
-      dispatch({type: "SET_NEW_PLAYER_JOINED", payload});
-    });
+    socket.on(
+      "@room-joined",
+      (payload: {room: Room; player: Player; type: "me" | "others"}) => {
+        dispatch({type: "SET_NEW_PLAYER_JOINED", payload});
+      }
+    );
 
     socket.on("@challenge-created", (payload: Challenge) => {
       dispatch({type: "SET_CHALLENGE", payload});
@@ -132,10 +139,6 @@ export const RoomProvider: React.FC<RoomProviderProps> = ({children}) => {
     }),
     [state]
   );
-
-  useEffect(() => {
-    console.log(state);
-  }, [state]);
 
   return <Context.Provider value={values}>{children}</Context.Provider>;
 };

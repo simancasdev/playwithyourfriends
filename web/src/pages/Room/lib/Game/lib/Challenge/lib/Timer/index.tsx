@@ -17,7 +17,7 @@ export const Timer: React.FC<TimerProps> = () => {
       <CountdownCircleTimer
         isPlaying
         size={70}
-        duration={15}
+        duration={5}
         strokeWidth={6}
         trailColor="#fff"
         colorsTime={[7, 5, 0]}

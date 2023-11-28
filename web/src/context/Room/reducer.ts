@@ -23,7 +23,12 @@ export function roomReducer(state: RoomState, action: RoomAction): RoomState {
     case "WAIT_FOR_ANSWERS":
       return {...state, ...payload, answerHistory: undefined};
     case "SET_NEW_PLAYER_JOINED":
-      return {...state, ...payload.room, me: payload.player, connected: true}; // <-- me is wrong because is updating on all users
+      return {
+        ...state,
+        ...payload.room,
+        me: payload.type === "me" ? payload["player"] : state["me"],
+        connected: true,
+      };
     case "UPDATE_ROOM":
       return {...state, [payload.key]: payload.value};
     case "SET_ANSWER_HISTORY":

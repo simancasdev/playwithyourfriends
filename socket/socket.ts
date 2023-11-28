@@ -38,7 +38,7 @@ io.on("connection", (socket) => {
     };
     db.rooms.push(newRoom);
 
-    socket.emit("@room-created", newRoom);
+    socket.emit("@room-created", {room: newRoom, host});
   });
 
   socket.on("@join-room", (data: {roomId: string; username: string}) => {
@@ -54,8 +54,8 @@ io.on("connection", (socket) => {
       db.rooms[roomIndex]["players"].push(newPlayer);
       // notify users
       const payload = {room: db.rooms[roomIndex], player: newPlayer};
-      socket.emit("@room-joined", payload);
-      socket.broadcast.emit("@room-joined", payload);
+      socket.emit("@room-joined", {...payload, type: "me"});
+      socket.broadcast.emit("@room-joined", {...payload, type: "others"});
     }
   });
 
