@@ -1,12 +1,7 @@
 1. Implement the theme state
-2. .. socket
-3. .. login screen
-4. .. formik
-5. .. create server with socket
-6. .. work on the room context
-7. Fix the react router and the context provider
-8. Fix the any on the reducer
-9. Handle socket error when try to join but there's not channel
-10. Refactorizar
-11. Change {} empty objects for default values
-12. Update interfaces on both sides
+2. .. work on the room context
+3. Fix the any on the reducer
+4. Handle socket error when try to join but there's not channel
+5. Refactorizar
+6. Change {} empty objects for default values
+7. Update interfaces on both sides

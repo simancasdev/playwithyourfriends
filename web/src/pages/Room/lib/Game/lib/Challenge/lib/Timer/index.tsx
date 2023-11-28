@@ -9,7 +9,7 @@ import {CountdownCircleTimer} from "react-countdown-circle-timer";
 interface TimerProps {}
 
 export const Timer: React.FC<TimerProps> = () => {
-  const {updateRoom} = useRoom();
+  const {sendAnswer} = useRoom();
   const {openModal} = useModal();
 
   return (
@@ -23,7 +23,7 @@ export const Timer: React.FC<TimerProps> = () => {
         colorsTime={[7, 5, 0]}
         colors={["#3869FC", "#A30000", "#A30000"]}
         onComplete={() => {
-          updateRoom("challenge", undefined);
+          sendAnswer(undefined);
           openModal(
             <Notification
               message="El tiempo se acabó"

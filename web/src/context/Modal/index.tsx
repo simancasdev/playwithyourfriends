@@ -44,6 +44,7 @@ export const ModalProvider: React.FC<ModalProviderProps> = ({children}) => {
 
   const onClose = useCallback(() => {
     setElement(undefined);
+    setConfig(DEFAULT_MODAL_CONFIG);
   }, []);
 
   const values = useMemo<IContext>(

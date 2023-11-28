@@ -1,7 +1,9 @@
 import {Button} from "styles";
+import shortid from "shortid";
+import {AnswerHistory} from "..";
+import {useEffect, useState} from "react";
 import {useModal, useRoom} from "context";
 import {checkEmptyFields} from "./helper";
-import {useEffect, useState} from "react";
 import {Answer, Challenge} from "interfaces";
 import {Body, Container, FormStyled, Head, Waiting} from "./styled";
 import {Close, Field, PossibleAnswers, Typography} from "components";
@@ -9,17 +11,22 @@ import {Close, Field, PossibleAnswers, Typography} from "components";
 interface PanelProps {}
 
 export const Panel: React.FC<PanelProps> = () => {
-  const {waitingForAnswers} = useRoom();
+  const {waitingForAnswers, answerHistory} = useRoom();
   const {openModal} = useModal();
+
   return !waitingForAnswers ? (
     <Container>
-      <Typography>Tus participantes estan esperando el desafío</Typography>
+      {answerHistory ? (
+        <AnswerHistory />
+      ) : (
+        <Typography>Tus participantes estan esperando el desafío</Typography>
+      )}
       <Button
         onClick={() => {
           openModal(<Form />, {containerStyle: {alignItems: "center"}});
         }}
       >
-        Crear desafío
+        {answerHistory!["challengeId"] ? "Crear otro" : "Crear desafío"}
       </Button>
     </Container>
   ) : (
@@ -39,6 +46,7 @@ export const Form: React.FC<FormProps> = () => {
     answers: [],
     question: "",
     correctAnswerId: "",
+    id: shortid.generate(),
     type: "guess-my-answer",
   });
 

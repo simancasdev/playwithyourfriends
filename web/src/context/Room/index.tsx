@@ -1,8 +1,15 @@
 import {useModal, useSocket} from "context";
 import {initialState, roomReducer} from "./reducer";
 import {useNavigate, useParams} from "react-router-dom";
-import {RoomState, RoomContext, RoomMethods} from "./types";
-import {Answer, Challenge, Children, Player, Room} from "interfaces";
+import {RoomState, RoomContext, RoomMethods, RoomAction} from "./types";
+import {
+  Room,
+  Answer,
+  Player,
+  Children,
+  Challenge,
+  AnswerHistory,
+} from "interfaces";
 import {
   useMemo,
   useEffect,
@@ -10,6 +17,7 @@ import {
   useReducer,
   useCallback,
   createContext,
+  Reducer,
 } from "react";
 
 const Context = createContext<RoomContext>({
@@ -30,15 +38,24 @@ export const RoomProvider: React.FC<RoomProviderProps> = ({children}) => {
   const {onClose} = useModal();
   const {roomId} = useParams<{roomId: string}>();
   const navigate = useNavigate();
-  const [state, dispatch] = useReducer(roomReducer, initialState);
+  const [state, dispatch] = useReducer<Reducer<RoomState, RoomAction>>(
+    roomReducer,
+    initialState
+  );
 
   /**
    * @function sendAnswer
    */
   const sendAnswer = useCallback(
-    (payload: Answer) => {
-      const {me} = state;
-      socket.emit("@send-answer", {answer: payload, player: me, roomId});
+    (payload: Answer | undefined) => {
+      const {me, challenge} = state;
+      socket.emit("@send-answer", {
+        roomId,
+        player: me,
+        answer: payload,
+        challengeId: challenge!["id"],
+      });
+      updateRoom("challenge", undefined);
     },
     [state, roomId]
   );
@@ -95,7 +112,14 @@ export const RoomProvider: React.FC<RoomProviderProps> = ({children}) => {
     socket.on("@challenge-created", (payload: Challenge) => {
       dispatch({type: "SET_CHALLENGE", payload});
     });
-  }, []);
+
+    socket.on("@challenge-completed", (payload: AnswerHistory) => {
+      dispatch({
+        type: "SET_ANSWER_HISTORY",
+        payload,
+      });
+    });
+  }, [state]);
 
   const values = useMemo<RoomState & RoomMethods>(
     () => ({

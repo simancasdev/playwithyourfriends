@@ -3,7 +3,7 @@ import cors from "cors";
 import shortid from "shortid";
 import express from "express";
 import {Server} from "socket.io";
-import {Answer, Challenge, DB, Player, Room} from "./interfaces";
+import {Answer, AnswerHistory, Challenge, DB, Player, Room} from "./interfaces";
 
 const PORT = process.env.PORT || 8090;
 const app = express();
@@ -32,6 +32,7 @@ io.on("connection", (socket) => {
     const newRoom: Room = {
       host,
       players: [],
+      answerHistory: [],
       challenge: undefined,
       id: shortid.generate(),
     };
@@ -77,20 +78,41 @@ io.on("connection", (socket) => {
 
   socket.on(
     "@send-answer",
-    (data: {answer: Answer; player: Player; roomId: string}) => {
-      const {answer, player} = data;
-      console.log(answer);
-      console.log(player);
+    (data: {
+      answer: Answer;
+      player: Player;
+      roomId: string;
+      challengeId: string;
+    }) => {
+      const {answer, player, roomId, challengeId} = data;
+      const roomIndex = db["rooms"].findIndex((room) => room["id"] === roomId);
+      const newAnswerHistoryRecord = {player, answer};
 
-      // const roomIndex = db["rooms"].findIndex((room) => room["id"] === roomId);
-      // if (roomIndex !== -1) {
-      //   // update database
-      //   db.rooms[roomIndex]["challenge"] = challenge;
-      //   socket.broadcast.emit(
-      //     "@challenge-created",
-      //     db.rooms[roomIndex]["challenge"]
-      //   );
-      // }
+      if (roomIndex !== -1) {
+        const challengeRecordIndex = db.rooms[roomIndex][
+          "answerHistory"
+        ].findIndex((record) => record["challengeId"] === challengeId);
+
+        if (challengeRecordIndex !== -1) {
+          db["rooms"][roomIndex]["answerHistory"][challengeRecordIndex][
+            "records"
+          ].push(newAnswerHistoryRecord);
+        } else {
+          db["rooms"][roomIndex]["answerHistory"].push({
+            challengeId,
+            records: [newAnswerHistoryRecord],
+          });
+        }
+
+        const history = db["rooms"][roomIndex]["answerHistory"].find(
+          (history) => history["challengeId"] === challengeId
+        ) as AnswerHistory;
+        const {records} = history;
+
+        if (records.length === db["rooms"][roomIndex]["players"].length) {
+          socket.broadcast.emit("@challenge-completed", history);
+        }
+      }
     }
   );
 });
