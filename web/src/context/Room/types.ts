@@ -3,6 +3,7 @@ import {Answer, AnswerHistory, Challenge, Player} from "interfaces";
 export type ActionType =
   | "SET_ROOM"
   | "UPDATE_ROOM"
+  | "RESET_STATE"
   | "SET_CHALLENGE"
   | "WAIT_FOR_ANSWERS"
   | "SET_ANSWER_HISTORY"
@@ -10,7 +11,7 @@ export type ActionType =
 
 export interface RoomAction {
   type: ActionType;
-  payload: any;
+  payload?: any;
 }
 
 export interface RoomMethods {

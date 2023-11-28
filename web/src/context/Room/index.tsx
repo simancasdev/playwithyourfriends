@@ -19,6 +19,8 @@ import {
   useCallback,
   createContext,
 } from "react";
+import {Notification} from "components";
+import {X} from "react-feather";
 
 const Context = createContext<RoomContext>({
   ...initialState,
@@ -35,9 +37,9 @@ interface RoomProviderProps extends Children {}
 
 export const RoomProvider: React.FC<RoomProviderProps> = ({children}) => {
   const {socket} = useSocket();
-  const {onClose} = useModal();
-  const {roomId} = useParams<{roomId: string}>();
   const navigate = useNavigate();
+  const {onClose, openModal} = useModal();
+  const {roomId} = useParams<{roomId: string}>();
   const [state, dispatch] = useReducer<Reducer<RoomState, RoomAction>>(
     roomReducer,
     initialState
@@ -125,6 +127,12 @@ export const RoomProvider: React.FC<RoomProviderProps> = ({children}) => {
         type: "SET_ANSWER_HISTORY",
         payload,
       });
+    });
+
+    socket.on("@exit-room", (message: string) => {
+      navigate("/");
+      openModal(<Notification message={message} icon={<X />} />);
+      dispatch({type: "RESET_STATE"});
     });
   }, [state]);
 

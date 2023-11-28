@@ -4,6 +4,7 @@ import shortid from "shortid";
 import express from "express";
 import {Server} from "socket.io";
 import {Answer, AnswerHistory, Challenge, DB, Player, Room} from "./interfaces";
+import {ERROR_MESSAGE} from "./error";
 
 const PORT = process.env.PORT || 8090;
 const app = express();
@@ -22,6 +23,10 @@ const db: DB = {
 };
 
 io.on("connection", (socket) => {
+  const exitRoom = (message: string): void => {
+    socket.broadcast.emit("@exit-room", message);
+  };
+
   socket.on("@create-room", (data: {username: string}) => {
     const {username} = data;
     const host: Player = {
@@ -36,27 +41,30 @@ io.on("connection", (socket) => {
       challenge: undefined,
       id: shortid.generate(),
     };
+    // update database
     db.rooms.push(newRoom);
-
+    // notify host
     socket.emit("@room-created", {room: newRoom, host});
   });
 
   socket.on("@join-room", (data: {roomId: string; username: string}) => {
     const {roomId, username} = data;
     const roomIndex = db["rooms"].findIndex((room) => room["id"] === roomId);
-    if (roomIndex !== -1) {
-      const newPlayer: Player = {
-        username,
-        id: shortid.generate(),
-      };
-
-      // update database
-      db.rooms[roomIndex]["players"].push(newPlayer);
-      // notify users
-      const payload = {room: db.rooms[roomIndex], player: newPlayer};
-      socket.emit("@room-joined", {...payload, type: "me"});
-      socket.broadcast.emit("@room-joined", {...payload, type: "others"});
+    if (roomIndex === -1) {
+      exitRoom(ERROR_MESSAGE["ROOM_NOT_AVAILABLE"]);
+      return;
     }
+    const newPlayer: Player = {
+      username,
+      id: shortid.generate(),
+    };
+    // update database
+    db.rooms[roomIndex]["players"].push(newPlayer);
+
+    const payload = {room: db.rooms[roomIndex], player: newPlayer};
+    socket.emit("@room-joined", {...payload, type: "me"});
+    // notify players
+    socket.broadcast.emit("@room-joined", {...payload, type: "others"});
   });
 
   socket.on(
@@ -64,15 +72,18 @@ io.on("connection", (socket) => {
     (data: {challenge: Challenge; roomId: string}) => {
       const {roomId, challenge} = data;
       const roomIndex = db["rooms"].findIndex((room) => room["id"] === roomId);
-
-      if (roomIndex !== -1) {
-        // update database
-        db.rooms[roomIndex]["challenge"] = challenge;
-        socket.broadcast.emit(
-          "@challenge-created",
-          db.rooms[roomIndex]["challenge"]
-        );
+      if (roomIndex === -1) {
+        exitRoom(ERROR_MESSAGE["SEND_CHALLENGE"]);
+        return;
       }
+
+      // update database
+      db.rooms[roomIndex]["challenge"] = challenge;
+      // notify players
+      socket.broadcast.emit(
+        "@challenge-created",
+        db.rooms[roomIndex]["challenge"]
+      );
     }
   );
 
@@ -88,30 +99,35 @@ io.on("connection", (socket) => {
       const roomIndex = db["rooms"].findIndex((room) => room["id"] === roomId);
       const newAnswerHistoryRecord = {player, answer};
 
-      if (roomIndex !== -1) {
-        const challengeRecordIndex = db.rooms[roomIndex][
-          "answerHistory"
-        ].findIndex((record) => record["challengeId"] === challengeId);
+      if (roomIndex === -1) {
+        exitRoom(ERROR_MESSAGE["ROOM_NOT_AVAILABLE"]);
+        return;
+      }
 
-        if (challengeRecordIndex !== -1) {
-          db["rooms"][roomIndex]["answerHistory"][challengeRecordIndex][
-            "records"
-          ].push(newAnswerHistoryRecord);
-        } else {
-          db["rooms"][roomIndex]["answerHistory"].push({
-            challengeId,
-            records: [newAnswerHistoryRecord],
-          });
-        }
+      const challengeRecordIndex = db.rooms[roomIndex][
+        "answerHistory"
+      ].findIndex((record) => record["challengeId"] === challengeId);
 
-        const history = db["rooms"][roomIndex]["answerHistory"].find(
-          (history) => history["challengeId"] === challengeId
-        ) as AnswerHistory;
-        const {records} = history;
+      if (challengeRecordIndex !== -1) {
+        db["rooms"][roomIndex]["answerHistory"][challengeRecordIndex][
+          "records"
+        ].push(newAnswerHistoryRecord);
+      } else {
+        db["rooms"][roomIndex]["answerHistory"].push({
+          challengeId,
+          records: [newAnswerHistoryRecord],
+        });
+      }
 
-        if (records.length === db["rooms"][roomIndex]["players"].length) {
-          socket.broadcast.emit("@challenge-completed", history);
-        }
+      const history = db["rooms"][roomIndex]["answerHistory"].find(
+        (history) => history["challengeId"] === challengeId
+      ) as AnswerHistory;
+
+      const {records} = history;
+      // We wait until all the players in the room send their
+      // answers to notify the host
+      if (records.length === db["rooms"][roomIndex]["players"].length) {
+        socket.broadcast.emit("@challenge-completed", history);
       }
     }
   );

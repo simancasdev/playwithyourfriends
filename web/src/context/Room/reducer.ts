@@ -33,6 +33,8 @@ export function roomReducer(state: RoomState, action: RoomAction): RoomState {
       return {...state, [payload.key]: payload.value};
     case "SET_ANSWER_HISTORY":
       return {...state, answerHistory: payload, waitingForAnswers: false};
+    case "RESET_STATE":
+      return initialState;
 
     default:
       return state;
