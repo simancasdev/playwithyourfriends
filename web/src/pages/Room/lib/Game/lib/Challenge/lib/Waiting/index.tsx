@@ -11,14 +11,13 @@ export const Waiting: React.FC<WaitingProps> = () => {
   return (
     <Container>
       <FidgetSpinner
-        visible={true}
-        height={45}
         width={45}
+        height={45}
+        visible={true}
         ariaLabel="dna-loading"
-        wrapperStyle={{}}
         wrapperClass="dna-wrapper"
-        ballColors={["#ff0000", "#00ff00", "#0000ff"]}
         backgroundColor="#F4442E"
+        ballColors={["#ff0000", "#00ff00", "#0000ff"]}
       />
       <Typography variant="title">
         Esperando desafío de {host["username"]}

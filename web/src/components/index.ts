@@ -7,7 +7,6 @@ export * from "./Host";
 export * from "./Modal";
 export * from "./Notification";
 export * from "./Player";
-export * from "./Podium";
 export * from "./PossibleAnswers";
 export * from "./Section";
 export * from "./Typography";

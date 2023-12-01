@@ -23,13 +23,13 @@ export const Timer: React.FC<TimerProps> = () => {
         colorsTime={[7, 5, 0]}
         colors={["#3869FC", "#A30000", "#A30000"]}
         onComplete={() => {
-          // sendAnswer(undefined);
-          // openModal(
-          //   <Notification
-          //     message="El tiempo se acabó"
-          //     icon={<Info color={COLORS["white"]} size={60} />}
-          //   />
-          // );
+          sendAnswer(undefined);
+          openModal(
+            <Notification
+              message="El tiempo se acabó"
+              icon={<Info color={COLORS["white"]} size={60} />}
+            />
+          );
         }}
       >
         {({remainingTime}) => <CountdownLabel>{remainingTime}</CountdownLabel>}

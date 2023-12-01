@@ -3,8 +3,8 @@ import cors from "cors";
 import shortid from "shortid";
 import express from "express";
 import {Server} from "socket.io";
-import {Answer, AnswerHistory, Challenge, DB, Player, Room} from "./interfaces";
 import {ERROR_MESSAGE} from "./error";
+import {Answer, AnswerHistory, Challenge, DB, Player, Room} from "./interfaces";
 
 const PORT = process.env.PORT || 8090;
 const app = express();

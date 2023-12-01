@@ -1,9 +1,9 @@
+import {COLORS} from "styles";
 import {Fragment} from "react";
 import {useRoom} from "context";
-import {CheckCircle, Icon, IconProps, X} from "react-feather";
 import {Avatar, Typography} from "components";
 import {Container, UserRecord} from "./styled";
-import {COLORS} from "styles";
+import {CheckCircle, IconProps, X} from "react-feather";
 
 interface AnswerHistoryProps {}
 

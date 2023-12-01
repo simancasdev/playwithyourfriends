@@ -14,9 +14,9 @@ const DEFAULT_MODAL_CONFIG: ModalConfig = {containerStyle: {}};
 
 type IContext = {
   config: ModalConfig;
+  onClose: () => void;
   element: JSX.Element | undefined;
   openModal: (element: JSX.Element, config?: ModalConfig) => void;
-  onClose: () => void;
 };
 
 const Context = createContext<IContext>({

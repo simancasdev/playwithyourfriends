@@ -1,3 +1,5 @@
+import {X} from "react-feather";
+import {Notification} from "components";
 import {useModal, useSocket} from "context";
 import {initialState, roomReducer} from "./reducer";
 import {useNavigate, useParams} from "react-router-dom";
@@ -19,8 +21,6 @@ import {
   useCallback,
   createContext,
 } from "react";
-import {Notification} from "components";
-import {X} from "react-feather";
 
 const Context = createContext<RoomContext>({
   ...initialState,
@@ -45,9 +45,6 @@ export const RoomProvider: React.FC<RoomProviderProps> = ({children}) => {
     initialState
   );
 
-  /**
-   * @function sendAnswer
-   */
   const sendAnswer = useCallback(
     (payload: Answer | undefined) => {
       const {me, challenge} = state;
@@ -62,16 +59,10 @@ export const RoomProvider: React.FC<RoomProviderProps> = ({children}) => {
     [state, roomId]
   );
 
-  /**
-   * @function createRoom
-   */
   const createRoom = useCallback((username: string) => {
     socket.emit("@create-room", {username});
   }, []);
 
-  /**
-   * @function joinRoom
-   */
   const joinRoom = useCallback(
     (username: string) => {
       socket.emit("@join-room", {roomId, username});
@@ -79,9 +70,6 @@ export const RoomProvider: React.FC<RoomProviderProps> = ({children}) => {
     [roomId]
   );
 
-  /**
-   * @function updateRoom
-   */
   const updateRoom = useCallback(
     (key: keyof RoomState, value: RoomState[keyof RoomState]) => {
       dispatch({type: "UPDATE_ROOM", payload: {key, value}});
@@ -89,9 +77,6 @@ export const RoomProvider: React.FC<RoomProviderProps> = ({children}) => {
     []
   );
 
-  /**
-   * @function sendChallenge
-   */
   const sendChallenge = useCallback(
     (challenge: Challenge) => {
       socket.emit("@send-challenge", {challenge, roomId});

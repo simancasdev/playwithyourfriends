@@ -16,8 +16,8 @@ interface SocketProviderProps extends Children {}
 
 export const SocketProvider: React.FC<SocketProviderProps> = ({children}) => {
   const socket = io("http://localhost:8090");
-
   socket.on("connection", () => {});
+
   const values = useMemo<IContext>(() => ({socket}), [socket]);
 
   return <Context.Provider value={values}>{children}</Context.Provider>;

@@ -1,7 +1,7 @@
 import {useDeviceTheme} from "hooks";
 import {getInitialSchema} from "./helper";
-import {createContext, useContext, useMemo} from "react";
 import {Children, ColorSchema} from "interfaces";
+import {createContext, useContext, useMemo} from "react";
 
 type IContext = {
   theme: ColorSchema;
